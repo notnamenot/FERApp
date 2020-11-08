@@ -4,10 +4,12 @@
 
     <uses-feature android:name="android.hardware.camera" android:required="true" />
 
-    <!--    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
-    <!--    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />-->
+        <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-permission android:name="pl.edu.agh.studio2.ferapp.fileprovider.READ"/>
 
     <application
         android:allowBackup="true"
@@ -26,7 +28,20 @@
             </intent-filter>
 
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="pl.edu.agh.studio2.ferapp.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths"></meta-data>
+        </provider>
+
     </application>
+
+
 
 
 

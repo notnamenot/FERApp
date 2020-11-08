@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">FER App</string>
+    <string name="show_emo">Emotion to show:</string>
+    <string name="random_emo_placeholder">Emotion Name</string>
 </resources>

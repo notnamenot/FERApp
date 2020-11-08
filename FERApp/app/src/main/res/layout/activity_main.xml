@@ -33,11 +33,12 @@
 
     <ImageView
         android:id="@+id/img_photo_taken"
-        android:layout_width="277dp"
-        android:layout_height="525dp"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/photo_taken"
         app:layout_constraintBottom_toTopOf="@+id/btn_send_res"
+        app:layout_constraintTop_toBottomOf="@id/btn_take_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,10 +51,9 @@
         android:text="@string/take_photo"
         app:layout_constraintBottom_toTopOf="@+id/img_photo_taken"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_show_emo"
-        app:layout_constraintVertical_bias="0.531" />
+        />
 
     <Button
         android:id="@+id/btn_send_res"
@@ -63,7 +63,8 @@
         android:layout_marginBottom="16dp"
         android:text="@string/send_result"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btn_try_again"/>
 
     <Button
         android:id="@+id/btn_try_again"
@@ -71,7 +72,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:text="@string/try_again"
+        android:text="@string/change_emo"
         app:layout_constraintBaseline_toBaselineOf="@+id/btn_send_res"
         app:layout_constraintEnd_toStartOf="@+id/btn_send_res"
         app:layout_constraintStart_toStartOf="parent" />

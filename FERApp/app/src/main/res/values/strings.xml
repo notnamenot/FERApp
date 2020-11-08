@@ -2,4 +2,8 @@
     <string name="app_name">FER App</string>
     <string name="show_emo">Emotion to show:</string>
     <string name="random_emo_placeholder">Emotion Name</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="send_result">Send result</string>
+    <string name="try_again">Try again</string>
+    <string name="photo_taken">Photo taken</string>
 </resources>

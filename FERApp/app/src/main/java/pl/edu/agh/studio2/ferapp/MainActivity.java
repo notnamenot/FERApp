@@ -3,7 +3,6 @@ package pl.edu.agh.studio2.ferapp;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,32 +17,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 //import java.util.Base64; //od API Level 26 (Android 8), a mamy 21 (Android 5)
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONString;
 
 //import okhttp3.MediaType;
 //import okhttp3.OkHttpClient;
@@ -60,16 +46,17 @@ public class MainActivity extends AppCompatActivity {
     static final String url = "https://ferappagh.azurewebsites.net/api/FER";
 //    public static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    TextView txt_random_emotion;
-    Emotion random_emotion;
-    Button btn_take_photo;
-    Button btn_send_res;
-    Button btn_try_again;
+    TextView txtRandomEmotion;
+    Emotion randomEmotion;
+    Button btnTakePhoto;
+    Button btnSendRes;
+    Button btnTryAgain;
+    ImageView imgEmoji;
 
     Uri fileUri;
     Uri photoURI;
     String currentPhotoPath;
-    ImageView img_photo;
+    ImageView imgPhoto;
 //    byte[] photo_byte_array;
     String encodedPhoto;
     String imageFileName;
@@ -85,22 +72,25 @@ public class MainActivity extends AppCompatActivity {
 //        client = new OkHttpClient();
         requestQueue = Volley.newRequestQueue(this);
 
-        txt_random_emotion = (TextView) findViewById(R.id.txt_random_emo);
+        txtRandomEmotion = (TextView) findViewById(R.id.txt_random_emo);
+        imgEmoji = findViewById(R.id.img_emoji);
         setRandomEmotion();
 
-        img_photo = findViewById(R.id.img_photo_taken);
-        btn_take_photo = findViewById(R.id.btn_take_photo);
-        btn_send_res = findViewById(R.id.btn_send_res);
-        btn_try_again = findViewById(R.id.btn_try_again);
+        imgPhoto = findViewById(R.id.img_photo_taken);
+        btnTakePhoto = findViewById(R.id.btn_take_photo);
+        btnSendRes = findViewById(R.id.btn_send_res);
+        btnTryAgain = findViewById(R.id.btn_try_again);
 
-        btn_take_photo.setOnClickListener(new View.OnClickListener() {
+
+
+        btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent2();
             }
         });
 
-        btn_send_res.setOnClickListener(new View.OnClickListener(){
+        btnSendRes.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 try {
@@ -114,11 +104,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btn_try_again.setOnClickListener(new View.OnClickListener(){
+        btnTryAgain.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 setRandomEmotion();
-                img_photo.setImageURI(null);
+                imgPhoto.setImageURI(null);
                 fileUri = null;
                 photoURI = null ;
                 currentPhotoPath = "";
@@ -136,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
 
-        new PostRequestAsync(this).execute(url,imageFileName, encodedPhoto,random_emotion.name());
+        new PostRequestAsyncTask(this).execute(url,imageFileName, encodedPhoto, randomEmotion.name());
     }
 
     private void dispatchTakePictureIntent() {
@@ -186,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        imageFileName = "JPEG_" + timeStamp + "_";
+        imageFileName = "IMG_" + timeStamp + "_";
         File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -234,8 +224,8 @@ public class MainActivity extends AppCompatActivity {
 //            img_photo.setImageBitmap(imageBitmap);
 //            encodePhoto(imageBitmap);
 //            Uri imgUri = data.getData(); //The default Android camera application returns a non-null intent only when passing back a thumbnail in the returned Intent. If you pass EXTRA_OUTPUT with a URI to write to, it will return a null intent and the picture is in the URI that you passed in.
-            img_photo.setImageURI(null);
-            img_photo.setImageURI(photoURI);
+            imgPhoto.setImageURI(null);
+            imgPhoto.setImageURI(photoURI);
 
             try {
                 encodePhoto(photoURI);
@@ -276,8 +266,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     void setRandomEmotion(){
-        random_emotion = Emotion.randomEmotion();
-        txt_random_emotion.setText(random_emotion.name());  //String.valueOf(random_emotion))
+        randomEmotion = Emotion.randomEmotion();
+        txtRandomEmotion.setText(randomEmotion.name());  //String.valueOf(random_emotion))
+        imgEmoji.setImageDrawable(getResources().getDrawable(randomEmotion.getDrawable()));
     }
 
 }

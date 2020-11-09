@@ -24,13 +24,13 @@ import java.lang.ref.WeakReference;
 
 import static com.android.volley.Response.success;
 
-public class PostRequestAsync extends AsyncTask<String, Integer, Long> {
+public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
 
     RequestQueue requestQueue;
 
     private Context contextRef;
 
-    public PostRequestAsync(Context context) {
+    public PostRequestAsyncTask(Context context) {
         contextRef = context;
         requestQueue = Volley.newRequestQueue(context);
     }

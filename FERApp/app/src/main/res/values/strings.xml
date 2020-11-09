@@ -8,4 +8,5 @@
     <string name="try_again">Try again</string>
     <string name="photo_taken">Photo taken</string>
     <string name="change_emo">Change emotion</string>
+    <string name="emotion">Emotion img</string>
 </resources>

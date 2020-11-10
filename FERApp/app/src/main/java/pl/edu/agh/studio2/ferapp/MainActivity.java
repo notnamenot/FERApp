@@ -38,6 +38,7 @@ import org.json.JSONException;
 //import okhttp3.Response;
 
 
+
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
     Button btnTakePhoto;
     Button btnSendRes;
     Button btnTryAgain;
+    Button btnChangeEmo;
     ImageView imgEmoji;
 
     Uri fileUri;
@@ -68,25 +70,36 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//
+//        final ActionBar actionBar = getActionBar();
+//        Drawable d=getResources().getDrawable(R.drawable.bg_net_grad2);
+//        actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)));
 
-//        client = new OkHttpClient();
+        //        client = new OkHttpClient();
         requestQueue = Volley.newRequestQueue(this);
 
         txtRandomEmotion = (TextView) findViewById(R.id.txt_random_emo);
         imgEmoji = findViewById(R.id.img_emoji);
-        setRandomEmotion();
-
         imgPhoto = findViewById(R.id.img_photo_taken);
         btnTakePhoto = findViewById(R.id.btn_take_photo);
-        btnSendRes = findViewById(R.id.btn_send_res);
+        btnChangeEmo = findViewById(R.id.btn_change_emo);
         btnTryAgain = findViewById(R.id.btn_try_again);
+        btnSendRes = findViewById(R.id.btn_send_res);
 
 
+        setInitialViewsVisibility();
+
+        setRandomEmotion();
 
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent2();
+                btnTakePhoto.setVisibility(View.INVISIBLE);
+                btnTryAgain.setVisibility(View.VISIBLE);
+//                btnSendRes.setVisibility(View.VISIBLE);
+                btnSendRes.setEnabled(true);
+                imgPhoto.setVisibility(View.VISIBLE);
             }
         });
 
@@ -104,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnTryAgain.setOnClickListener(new View.OnClickListener(){
+        btnChangeEmo.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
                 setRandomEmotion();
@@ -113,10 +126,25 @@ public class MainActivity extends AppCompatActivity {
                 photoURI = null ;
                 currentPhotoPath = "";
                 encodedPhoto = "";
+                setInitialViewsVisibility();
             }
         });
 
+        btnTryAgain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent2();
+            }
+        });
 
+    }
+
+    private void setInitialViewsVisibility() {
+        imgPhoto.setVisibility(View.INVISIBLE);
+        btnTakePhoto.setVisibility(View.VISIBLE);
+        btnTryAgain.setVisibility(View.INVISIBLE);
+//        btnSendRes.setVisibility(View.INVISIBLE);
+        btnSendRes.setEnabled(false);
     }
 
     private void sendPhoto() throws JSONException {

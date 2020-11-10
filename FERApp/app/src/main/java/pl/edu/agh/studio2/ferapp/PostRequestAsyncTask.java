@@ -91,6 +91,7 @@ public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
                 protected Response parseNetworkResponse(NetworkResponse response) {
                     try {
                         String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                        publishProgress(response.statusCode);
                         return Response.success(new JSONObject("{'status':"+String.valueOf(response.statusCode)+"}"),HttpHeaderParser.parseCacheHeaders(response));
 //                        return Response.success(new JSONObject(jsonString),HttpHeaderParser.parseCacheHeaders(response));
                     } catch (UnsupportedEncodingException e) {
@@ -148,6 +149,6 @@ public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
     }
 
     protected void onProgressUpdate(Integer... progress) {
-        Toast.makeText(contextRef,progress.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(contextRef,"status: " + progress[0], Toast.LENGTH_LONG).show();
     }
 }

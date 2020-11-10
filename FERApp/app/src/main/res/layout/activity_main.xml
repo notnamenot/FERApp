@@ -9,17 +9,15 @@
 
     <ImageView
         android:id="@+id/img_photo_taken"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:contentDescription="@string/photo_taken"
-
         app:layout_constraintBottom_toTopOf="@+id/btn_send_res"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_take_photo"
-
+        app:layout_constraintTop_toBottomOf="@id/img_emoji"
         />
 <!--    app:srcCompat="@android:drawable/ic_menu_camera"-->
 
@@ -40,6 +38,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/img_emoji"
+            app:layout_constraintBottom_toTopOf="@+id/btn_change_emo"
             android:background="@drawable/ic_camera2"
             />
 
@@ -55,6 +54,25 @@
 
 <!-- />-->
 
+    <Button
+        android:id="@+id/btn_change_emo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="@string/change_emo"
+        app:layout_constraintBaseline_toBaselineOf="@+id/btn_send_res"
+        app:layout_constraintEnd_toStartOf="@+id/btn_send_res"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/btn_try_again"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/try_again"
+        app:layout_constraintBottom_toTopOf="@id/btn_change_emo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/btn_send_res"
@@ -65,18 +83,9 @@
         android:text="@string/send_result"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/btn_try_again" />
+        app:layout_constraintStart_toEndOf="@id/btn_change_emo" />
 
-    <Button
-        android:id="@+id/btn_try_again"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:text="@string/change_emo"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btn_send_res"
-        app:layout_constraintEnd_toStartOf="@+id/btn_send_res"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
     <LinearLayout
         android:id="@+id/lin_layount"
@@ -94,11 +103,9 @@
             android:id="@+id/txt_show_emo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
-            android:alpha="51"
             android:text="@string/show_emo"
             android:textAlignment="center"
-            android:textSize="24sp" />
+            android:textSize="26sp" />
 
         <TextView
             android:id="@+id/txt_random_emo"
@@ -108,7 +115,7 @@
             android:text="@string/random_emo_placeholder"
             android:textAlignment="center"
 
-            android:textSize="30sp" />
+            android:textSize="32sp" />
     </LinearLayout>
 
     <ImageView
@@ -116,7 +123,6 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginTop="20dp"
-
         android:contentDescription="@string/emotion"
         app:layout_constraintBottom_toBottomOf="@+id/lin_layount"
         app:layout_constraintEnd_toEndOf="parent"
@@ -124,6 +130,7 @@
 
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/emo_neutral" />
+
 
 
 

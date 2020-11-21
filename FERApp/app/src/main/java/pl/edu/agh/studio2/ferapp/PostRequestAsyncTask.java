@@ -19,10 +19,17 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.lang.ref.WeakReference;
 
+//import static android.provider.Settings.System.getString;
 import static com.android.volley.Response.success;
+import org.apache.commons.io.IOUtils;
 
 public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
 
@@ -43,6 +50,23 @@ public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
         String encodedPhoto = strings[2];
         String random_emotion = strings[3];
 
+        // CONNECTION TEST - take encoded photo from file
+        
+//        FileInputStream fis = null;
+//        try {
+//            fis = new FileInputStream("D:\\Studia\\s7\\studio\\encodedLeo.txt");
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+//            String stringTooLong = IOUtils.toString(fis, "UTF-8");
+//            encodedPhoto = stringTooLong;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        encodedPhoto = getTermsString();
+
+
         JSONObject json = null;
         try {
             json = new JSONObject()
@@ -52,16 +76,19 @@ public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-//        String jsonString = json.toString();
+
+        // String jsonString = json.toString();
 
 //        Toast.makeText(getApplicationContext(),jsonString, Toast.LENGTH_LONG).show();
 
-        /*RequestBody body = RequestBody.create(JSON, jsonString);
+        /*
+        RequestBody body = RequestBody.create(JSON, jsonString);
 
         Request request = new Request.Builder()
                 .url(url)
                 .post(body)
-                .build();*/
+                .build();
+        */
 
         try {
 
@@ -92,6 +119,7 @@ public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
                     try {
                         String jsonString = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
                         publishProgress(response.statusCode);
+                        Log.i("VOLLEY", jsonString);
                         return Response.success(new JSONObject("{'status':"+String.valueOf(response.statusCode)+"}"),HttpHeaderParser.parseCacheHeaders(response));
 //                        return Response.success(new JSONObject(jsonString),HttpHeaderParser.parseCacheHeaders(response));
                     } catch (UnsupportedEncodingException e) {
@@ -102,6 +130,7 @@ public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
                 }
             };
 
+            // FOR PLAIN REQUEST (NOT JsonObjectRequest)
 //            StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
 //                @Override
 //                public void onResponse(String response) {
@@ -150,5 +179,25 @@ public class PostRequestAsyncTask extends AsyncTask<String, Integer, Long> {
 
     protected void onProgressUpdate(Integer... progress) {
         Toast.makeText(contextRef,"status: " + progress[0], Toast.LENGTH_LONG).show();
+    }
+
+    private String getTermsString() {
+        StringBuilder termsString = new StringBuilder();
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(
+                    new InputStreamReader(contextRef.getAssets().open("encodedLeo.txt")));
+
+            String str;
+            while ((str = reader.readLine()) != null) {
+                termsString.append(str);
+            }
+
+            reader.close();
+            return termsString.toString();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

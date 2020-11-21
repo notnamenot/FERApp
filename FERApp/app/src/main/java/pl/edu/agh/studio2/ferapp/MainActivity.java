@@ -6,6 +6,7 @@ import androidx.core.content.FileProvider;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,6 +21,7 @@ import android.widget.Toast;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -30,12 +32,6 @@ import java.util.Date;
 //import java.util.Base64; //od API Level 26 (Android 8), a mamy 21 (Android 5)
 import org.apache.commons.codec.binary.Base64;
 import org.json.JSONException;
-
-//import okhttp3.MediaType;
-//import okhttp3.OkHttpClient;
-//import okhttp3.Request;
-//import okhttp3.RequestBody;
-//import okhttp3.Response;
 
 
 
@@ -59,23 +55,16 @@ public class MainActivity extends AppCompatActivity {
     Uri photoURI;
     String currentPhotoPath;
     ImageView imgPhoto;
-//    byte[] photo_byte_array;
     String encodedPhoto;
     String imageFileName;
 
-//    private OkHttpClient client;
     RequestQueue requestQueue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//
-//        final ActionBar actionBar = getActionBar();
-//        Drawable d=getResources().getDrawable(R.drawable.bg_net_grad2);
-//        actionBar.setBackgroundDrawable(new ColorDrawable(ContextCompat.getColor(this, R.color.colorAccent)));
 
-        //        client = new OkHttpClient();
         requestQueue = Volley.newRequestQueue(this);
 
         txtRandomEmotion = (TextView) findViewById(R.id.txt_random_emo);
@@ -88,13 +77,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         setInitialViewsVisibility();
-
         setRandomEmotion();
 
         btnTakePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent2();
+//                dispatchTakePictureIntent2(); // FOR FULL PHOTO SIZE
+                dispatchTakePictureIntent();
                 btnTakePhoto.setVisibility(View.INVISIBLE);
                 btnTryAgain.setVisibility(View.VISIBLE);
 //                btnSendRes.setVisibility(View.VISIBLE);
@@ -133,7 +122,8 @@ public class MainActivity extends AppCompatActivity {
         btnTryAgain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dispatchTakePictureIntent2();
+//                dispatchTakePictureIntent2(); // FOR FULL PHOTO SIZE
+                dispatchTakePictureIntent();
             }
         });
 
@@ -160,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        fileUri = getOutputMediaFileUri();
-        takePictureIntent.putExtra( MediaStore.EXTRA_OUTPUT, fileUri );
+//        fileUri = getOutputMediaFileUri();
+//        takePictureIntent.putExtra( MediaStore.EXTRA_OUTPUT, fileUri );
 
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -171,11 +161,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     /** Create a file Uri for saving an image or video */
+    // FOR FULL PHOTO SIZE
     private static Uri getOutputMediaFileUri(){
         return Uri.fromFile(getOutputMediaFile());
     }
 
     /** Create a File for saving an image or video */
+    // FOR FULL PHOTO SIZE
     private static File getOutputMediaFile(){
         // To be safe, you should check that the SDCard is mounted
         // using Environment.getExternalStorageState() before doing this.
@@ -201,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         return mediaFile;
     }
 
+    // FOR FULL PHOTO SIZE
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
@@ -217,6 +210,7 @@ public class MainActivity extends AppCompatActivity {
         return image;
     }
 
+    // FOR FULL PHOTO SIZE
     private void dispatchTakePictureIntent2() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         // Ensure that there's a camera activity to handle the intent
@@ -241,25 +235,41 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    // FOR FULL PHOTO SIZE
     //@SuppressLint("MissingSuperCall")
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+////            Bundle extras = data.getExtras();
+////            Bitmap imageBitmap = (Bitmap) extras.get("data");
+////            img_photo.setImageBitmap(imageBitmap);
+////            encodePhoto(imageBitmap);
+////            Uri imgUri = data.getData(); //The default Android camera application returns a non-null intent only when passing back a thumbnail in the returned Intent. If you pass EXTRA_OUTPUT with a URI to write to, it will return a null intent and the picture is in the URI that you passed in.
+//            imgPhoto.setImageURI(null);
+//            imgPhoto.setImageURI(photoURI);
+//
+//            try {
+//                encodePhoto(photoURI);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            img_photo.setImageBitmap(imageBitmap);
-//            encodePhoto(imageBitmap);
-//            Uri imgUri = data.getData(); //The default Android camera application returns a non-null intent only when passing back a thumbnail in the returned Intent. If you pass EXTRA_OUTPUT with a URI to write to, it will return a null intent and the picture is in the URI that you passed in.
-            imgPhoto.setImageURI(null);
-            imgPhoto.setImageURI(photoURI);
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imgPhoto.setImageBitmap(imageBitmap);
 
-            try {
-                encodePhoto(photoURI);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            encodePhoto(imageBitmap);
+
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            imageFileName = "IMG_" + timeStamp + "_";
+
         }
     }
 
@@ -292,6 +302,18 @@ public class MainActivity extends AppCompatActivity {
         }
         return byteBuffer.toByteArray();
     }
+
+//    public static InputStream resizeImage(InputStream inputStream, int width, int height, String formatName) throws IOException {
+//        BufferedImage sourceImage = ImageIO.read(inputStream);
+//        Image thumbnail = sourceImage.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+//        BufferedImage bufferedThumbnail = new BufferedImage(thumbnail.getWidth(null),
+//                thumbnail.getHeight(null),
+//                BufferedImage.TYPE_INT_RGB);
+//        bufferedThumbnail.getGraphics().drawImage(thumbnail, 0, 0, null);
+//        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//        ImageIO.write(bufferedThumbnail, formatName, baos);
+//        return new ByteArrayInputStream(baos.toByteArray());
+//    }
 
     void setRandomEmotion(){
         randomEmotion = Emotion.randomEmotion();
